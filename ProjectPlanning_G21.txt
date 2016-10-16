@@ -7,6 +7,15 @@ Adam - Moderator between front end back end, also in charge of login authenticat
 Jeff - In charge of back end programming in PHP
 
 
+
+
+
+
+
+
+
+
+
 Communication
 
 -Daily communication using GroupMe chatting app
