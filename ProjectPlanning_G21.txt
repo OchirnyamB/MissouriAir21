@@ -2,7 +2,7 @@ Description of member parts
 
 Jack - In charge of front end design using bootstrap front end framework
 Luke - In charge of Database management and mysql interaction 
-Ryan - In charge of back end programming in PHP
+Ryan - In charge of back end programming in PHP test
 Adam - Moderator between front end back end, also in charge of login authentication design
 Jeff - In charge of back end programming in PHP
 
