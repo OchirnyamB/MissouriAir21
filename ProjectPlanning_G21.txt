@@ -15,4 +15,4 @@ Communication
 
 -Scheduled meetups every Sunday at 2pm
 
--Mailing when communications face conlficts
+-EMailing when communications face conlficts
