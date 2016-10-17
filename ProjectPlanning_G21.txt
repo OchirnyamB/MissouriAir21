@@ -1,7 +1,7 @@
 Description of member parts
 
 Jack - Graphic Designer/Front End Designer, in charge of front end design using bootstrap front end framework
-Luke - Data Base Administrator/Developer, in charge of Database management and mysql interaction 
+Luke - DataBase Administrator/Developer, in charge of Database management and mysql interaction 
 Ryon - Team Leader/Back End Developer, in charge of back end programming in PHP for session management and fetching/displaying of database information.
 Adam - Github manager/Full Stack Developer, in charge of moderating between front end back end, also in charge of login authentication design
 Jeff - Developer, In charge of helping and reviewing back end programming in PHP
