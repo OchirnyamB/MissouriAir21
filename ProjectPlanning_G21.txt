@@ -1,17 +1,17 @@
 Description of member parts
 
-Jack - In charge of front end design using bootstrap front end framework
-Luke - In charge of Database management and mysql interaction 
-Ryon - In charge of back end programming in PHP for session management and fetching/displaying of database information.
-Adam - Moderator between front end back end, also in charge of login authentication design
-Jeff - In charge of back end programming in PHP
+Jack - Graphic Designer/Front End Designer, in charge of front end design using bootstrap front end framework
+Luke - Data Base Administrator/Developer, in charge of Database management and mysql interaction 
+Ryon - Team Leader/Back End Developer, in charge of back end programming in PHP for session management and fetching/displaying of database information.
+Adam - Github manager/Full Stack Developer, in charge of moderating between front end back end, also in charge of login authentication design
+Jeff - Developer, In charge of helping and reviewing back end programming in PHP
 
-Communication
+Communication and Deadline scheduling
 
 -Daily communication using GroupMe chatting app
 
 -Version Control and code management in Github repository
 
--Scheduled meetups every Sunday at 2pm
+-Scheduled meetups every Sunday before deadline of every milestone at 2pm
 
 -EMailing when communications face conlficts
