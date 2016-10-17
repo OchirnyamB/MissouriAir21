@@ -12,6 +12,6 @@ Communication and Deadline scheduling
 
 -Version Control and code management in Github repository
 
--Scheduled meetups every Sunday before deadline of every milestone at 2pm
+-Scheduled meetups every Sunday at 2pm before deadline of every milestone
 
 -EMailing when communications face conlficts
