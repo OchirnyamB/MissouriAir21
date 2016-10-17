@@ -6,16 +6,6 @@ Ryan - In charge of back end programming in PHP test
 Adam - Moderator between front end back end, also in charge of login authentication design
 Jeff - In charge of back end programming in PHP
 
-
-
-
-
-
-
-
-
-
-
 Communication
 
 -Daily communication using GroupMe chatting app
