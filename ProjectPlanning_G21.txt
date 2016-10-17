@@ -20,8 +20,8 @@ Tentative Deadlines:
 Milestone 1:
   - October 16th, 2016: Complete first draft of ERD and schedule for review 
 Milestone 2: 
-  - Octrober 23rd, 2016: Create SQL tables and revise ERD for group review. Formulate general design patter for website and       plan out necessary backend code.
+  - Octrober 23rd, 2016: Create SQL tables and revise ERD for group review. Formulate general design patter for website and plan out necessary backend code.
 Milestone 3:
-  - November 15th, 2016: Complete most major functions of the website and database and debugg with group as necessary. Write       out group progress report. 
+  - November 15th, 2016: Complete most major functions of the website and database and debugg with group as necessary. Write out group progress report. 
 Final Project:
-  - November 20th-26th, 2016: Finalize all functions and design for the website. Debugg and trouble shoot with group as           needed. Reherse for presentation and prepare the final report document. 
+  - November 20th-26th, 2016: Finalize all functions and design for the website. Debugg and trouble shoot with group as needed. Reherse for presentation and prepare the final report document. 
