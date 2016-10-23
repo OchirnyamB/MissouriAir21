@@ -7,5 +7,7 @@
    $passwordToHash = $employee_id + $password;
    echo $passwordToHash;
    echo md5($passwordToHash);
+
+   echo "Jeff did a change"
 ?>
 
