@@ -15,6 +15,12 @@ DROP TABLE IF EXISTS test.pilot_model;
 DROP TABLE IF EXISTS test.pilot_flight;
 DROP TABLE IF EXISTS test.attendant_flight;
 
+CREATE TABLE user (
+  user_id INT NOT NULL AUTO_INCREMENT,
+  first_name VARCHAR(20),
+  last_name VARCHAR(20),
+  PRIMARY KEY (user_id)
+);
 
 CREATE TABLE log (
  log_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -23,13 +29,6 @@ CREATE TABLE log (
  action VARCHAR(255),
  PRIMARY KEY(log_id),
  fk_user INT UNSIGNED NOT NULL REFERENCES user(user_id)
-);
-
-CREATE TABLE user (
-  user_id INT NOT NULL AUTO_INCREMENT,
-  first_name VARCHAR(20),
-  last_name VARCHAR(20),
-  PRIMARY KEY (user_id)
 );
 
 CREATE TABLE employee (
@@ -43,40 +42,33 @@ CREATE TABLE customer (
   customer_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   age INT UNSIGNED,
   fk_user_id INT UNSIGNED NOT NULL REFERENCES user(user_id),
-  fk_reservation_num INT UNSIGNED NOT NULL REFERENCES reservation(flight_num),
   PRIMARY KEY(customer_id)
 );
 
 CREATE TABLE authentication (
   password VARCHAR(20) NOT NULL,
   fk_emp_id INT UNSIGNED NOT NULL REFERENCES employee(employee_id),
-  fk_role VARCHAR(1) NOT NULL REFERENCES employee(role),
-  PRIMARY KEY(fk_emp_id, fk_role)
+  PRIMARY KEY(fk_emp_id)
 );
 
 CREATE TABLE administrator (
-  fk_role VARCHAR(1) NOT NULL REFERENCES employee(role),
   fk_employee_id INT UNSIGNED NOT NULL REFERENCES employee(employee_id),
   admin_rank VARCHAR(20) NOT NULL,
-  PRIMARY KEY(fk_employee_id, fk_role)
+  PRIMARY KEY(fk_employee_id)
 );
 
 CREATE TABLE pilot (
-  fk_role VARCHAR(1) NOT NULL REFERENCES employee(role),
   fk_employee_id INT UNSIGNED NOT NULL REFERENCES employee(employee_id),
   status BOOLEAN NOT NULL,
   flight_hours INT UNSIGNED,
   pilot_rank VARCHAR(20),
-  PRIMARY KEY(fk_employee_id, fk_role),
-  fk_flight_num INT UNSIGNED REFERENCES flight(flight_num)
+  PRIMARY KEY(fk_employee_id),
 );
 
 CREATE TABLE attendant (
-  fk_role VARCHAR(1) NOT NULL REFERENCES employee(role),
   fk_employee_id INT UNSIGNED NOT NULL REFERENCES employee(employee_id),
   attendant_rank VARCHAR(20),
-  PRIMARY KEY(fk_employee_id, fk_role),
-  fk_flight_num INT UNSIGNED REFERENCES flight(flight_num)
+  PRIMARY KEY(fk_employee_id),
 );
 
 CREATE TABLE model (
