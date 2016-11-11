@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS 'user';
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
 `user_id` int(10) NOT NULL AUTO_INCREMENT,
 `fname` varchar(15),
@@ -20,18 +20,18 @@ FOREIGN KEY(`user_id`) REFERENCES `user` (`user_id`)
 DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee` (
 `employee_id` int(10) NOT NULL,
-`role` varchar(10),
+`role` varchar(15),
 PRIMARY KEY(`employee_id`),
-FOREIGN KEY (`employee_id`) REFERENCES `user` (`user_id`)
+FOREIGN KEY (`employee_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `authentication`;
 CREATE TABLE `authentication`(
 `employee_id` int(10) NOT NULL,
 `password` varchar(30) NOT NULL,
-`role` varchar(10),
+`role` varchar(15),
 PRIMARY KEY(`employee_id`),
-FOREIGN KEY(`employee_id`) REFERENCES `employee` (`employee_id`)
+FOREIGN KEY(`employee_id`) REFERENCES `employee` (`employee_id`)  ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `customer`;
@@ -39,7 +39,7 @@ CREATE TABLE `customer` (
 `customer_id` int(10) NOT NULL,
 `age` int(3) NOT NULL,
 PRIMARY KEY (`customer_id`),
-FOREIGN KEY (`customer_id`) REFERENCES `user` (`user_id`)
+FOREIGN KEY (`customer_id`) REFERENCES `user` (`user_id`)  ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `administrator`;
@@ -47,17 +47,18 @@ CREATE TABLE `administrator`(
 `admin_id` int(10) NOT NULL,
 `admin_rank` varchar(10),
 PRIMARY KEY (`admin_id`),
-FOREIGN KEY (`admin_id`) REFERENCES `employee` (`employee_id`)
+FOREIGN KEY (`admin_id`) REFERENCES `employee` (`employee_id`)  ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `pilot`;
 CREATE TABLE `pilot` (
 `pilot_id` int(10) NOT NULL,
 `status` varchar(10) NOT NULL,
-`flight_hours` int(10),
+`flight_hours` int(10) NOT NULL,
+CHECK (`flight_hours` > 0),
 `pilot_rank` varchar(10) NOT NULL,
 PRIMARY KEY (`pilot_id`),
-FOREIGN KEY (`pilot_id`) REFERENCES `employee` (`employee_id`)
+FOREIGN KEY (`pilot_id`) REFERENCES `employee` (`employee_id`)  ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `attendant`;
@@ -65,7 +66,7 @@ CREATE TABLE `attendant` (
 `attendant_id` int(10) NOT NULL,
 `attendant_rank` varchar(10) NOT NULL,
 PRIMARY KEY (`attendant_id`),
-FOREIGN KEY (`attendant_id`) REFERENCES `employee` (`employee_id`)
+FOREIGN KEY (`attendant_id`) REFERENCES `employee` (`employee_id`)  ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `model`;
@@ -90,9 +91,8 @@ CREATE TABLE `flight`(
 `flight_id` int(10) NOT NULL AUTO_INCREMENT,
 `departing_city` varchar(30) NOT NULL,
 `destination_city` varchar(30) NOT NULL,
---price should not be in the flight table; price should be in reservation table
 `plane_id` int(10) NOT NULL,
-`days` varchar(10) NOT NULL, --i've forgotten what this is??
+`days` varchar(10) NOT NULL,
 PRIMARY KEY (`flight_id`),
 FOREIGN KEY (`plane_id`) REFERENCES `equipment` (`plane_id`)
 );
@@ -103,10 +103,9 @@ CREATE TABLE `reservation`(
 `customer_id` int(10) NOT NULL,
 `date_reserved` date NOT NULL,
 `num_bags` int(2) NOT NULL,
---for normalization, price should be calculated on the fly based on num_bags
 PRIMARY KEY (`flight_id`, `customer_id`),
-FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`),
-FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
+FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`) ON DELETE CASCADE,
+FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `pilot_model`;
@@ -114,8 +113,8 @@ CREATE TABLE `pilot_model`(
 `pilot_id` int(10) NOT NULL,
 `plane_model` varchar(15) NOT NULL,
 PRIMARY KEY (`pilot_id`, `plane_model`),
-FOREIGN KEY (`pilot_id`) REFERENCES `pilot` (`pilot_id`),
-FOREIGN KEY (`plane_model`) REFERENCES `model`(`plane_model`)
+FOREIGN KEY (`pilot_id`) REFERENCES `pilot` (`pilot_id`) ON DELETE CASCADE,
+FOREIGN KEY (`plane_model`) REFERENCES `model`(`plane_model`) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `pilot_flight`;
@@ -123,8 +122,8 @@ CREATE TABLE `pilot_flight` (
 `pilot_id` int(10) NOT NULL,
 `flight_id` int(10) NOT NULL,
 PRIMARY KEY (`pilot_id`, `flight_id`),
-FOREIGN KEY (`pilot_id`) REFERENCES `pilot` (`pilot_id`),
-FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`)
+FOREIGN KEY (`pilot_id`) REFERENCES `pilot` (`pilot_id`) ON DELETE CASCADE,
+FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `attendant_flight`;
@@ -132,6 +131,47 @@ CREATE TABLE `attendant_flight`(
 `attendant_id` int(10) NOT NULL,
 `flight_id` int(10) NOT NULL,
 PRIMARY KEY (`attendant_id`, `flight_id`),
-FOREIGN KEY (`attendant_id`) REFERENCES `attendant` (`attendant_id`),
-FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`)
+FOREIGN KEY (`attendant_id`) REFERENCES `attendant` (`attendant_id`) ON DELETE CASCADE,
+FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`) ON DELETE CASCADE
 );
+
+--To drop all tables, execute the following in this order:
+
+DROP TABLE IF EXISTS `attendant_flight`;
+DROP TABLE IF EXISTS `pilot_flight`;
+DROP TABLE IF EXISTS `pilot_model`;
+DROP TABLE IF EXISTS `reservation`;
+DROP TABLE IF EXISTS `flight`;
+DROP TABLE IF EXISTS `equipment`;
+DROP TABLE IF EXISTS `model`;
+DROP TABLE IF EXISTS `attendant`;
+DROP TABLE IF EXISTS `pilot`;
+DROP TABLE IF EXISTS `administrator`;
+DROP TABLE IF EXISTS `customer`;
+DROP TABLE IF EXISTS `authentication`;
+DROP TABLE IF EXISTS `employee`;
+DROP TABLE IF EXISTS `log`;
+DROP TABLE IF EXISTS `user`;
+
+--   --   --   --   --   --   --   --   --   --   --   --   --   --   --   --
+
+-------------------------------------
+--creating new employee from internet site UI:
+/*employee:
+	Name: John Smith
+	Role: Pilot
+	Status: Active
+	Flight Hours: 438
+	Rank: Pilot
+*/
+
+INSERT INTO `user` (`fname`, `lname`) VALUES ('John', 'Smith');
+$id = SELECT `user_id` FROM `user` WHERE `fname`='John' AND `lname`='Smith';
+INSERT INTO `empoloyee`(`employee_id`, `role`) VALUES ($id, 'Pilot');
+INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES($id, 'Active', 438, 'Pilot');
+
+-------------------------------------
+
+SELECT reservation.flight_id, departing_city, destination_city, fname, lname, num_bags*20 AS price FROM flight, reservation, user, customer WHERE user_id = customer.customer_id AND customer.customer_id = reservation.customer_id AND reservation.flight_id = flight.flight_id GROUP BY flight.flight_id;
+
+SELECT flight.flight_id, departing_city, destination_city, COUNT(reservation.flight_id) AS Passengers, SUM(reservation.num_bags*20) AS Revenue FROM flight, reservation WHERE reservation.flight_id = flight.flight_id;
