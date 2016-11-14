@@ -70,15 +70,15 @@ PRIMARY KEY (`pilot_id`),
 FOREIGN KEY (`pilot_id`) REFERENCES `employee` (`employee_id`)  ON DELETE CASCADE
 );
 
-DELIMITER @@
+DELIMITER $$
 CREATE TRIGGER check_flight_hours BEFORE INSERT ON `pilot`
-FOR EACH ROW
-BEGIN
+FOR EACH ROW BEGIN
 IF NEW.flight_hours<0 THEN
-SET NEW.flight_hours=0;
+SET NEW.flight_hours=NULL;
 END IF;
-END@@
-DELIMITER;
+END $$;
+$$
+DELIMITER ;
 
 CREATE TABLE `attendant` (
 `attendant_id` int(10) NOT NULL,
@@ -111,6 +111,16 @@ CREATE TABLE `flight`(
 PRIMARY KEY (`flight_id`),
 FOREIGN KEY (`plane_id`) REFERENCES `equipment` (`plane_id`)
 );
+
+DELIMITER @@
+CREATE TRIGGER check_no_circle_flight BEFORE INSERT ON `flight`
+FOR EACH ROW BEGIN
+IF NEW.departing_city = NEW.destination_city THEN
+SET NEW.destination_city = NULL;
+END IF;
+END @@;
+@@
+DELIMITER ;
 
 CREATE TABLE `reservation`(
 `flight_id` int(10) NOT NULL,
@@ -155,6 +165,11 @@ SELECT reservation.flight_id, departing_city, destination_city, fname, lname, nu
 SELECT flight.flight_id, departing_city, destination_city, COUNT(reservation.flight_id) AS Passengers, SUM(reservation.num_bags*20) AS Revenue FROM flight, reservation WHERE reservation.flight_id = flight.flight_id;
 */
 
+--Create a pilot, an admin, a customer, and an attendant and give them authentication
+--Also add some plane models, equipment, and flights
+--Give the pilot authorization to fly the Denali
+--Also schedule the pilot for the flight
+--Also make a reservation by the customer on the flight
 INSERT INTO `user` (`fname`, `lname`, `role`) VALUES ('John', 'Doe', 'pilot'), ('Jane', 'Smith', 'Admin'), ('Gus', 'Tomer', 'customer'), ('Ann', 'Smiley', 'attendant');
 INSERT INTO `employee` (`employee_id`) VALUES (1), (2), (4);
 INSERT INTO `customer` (`customer_id`, `age`) VALUES (3, 20);
@@ -170,25 +185,42 @@ INSERT INTO `pilot_model` (`pilot_id`, `plane_model`) VALUES (1, 'Denali');
 INSERT INTO `attendant_flight` (`attendant_id`, `flight_id`) VALUES (4, 1);
 INSERT INTO `reservation` (`flight_id`, `customer_id`, `date_reserved`, `num_bags`) VALUES (1, 3, '2016-04-30', 4);
 
---new pilot
+
+/*  new pilot:
+		Name: Red Baron
+		ID: 5 (hardcoded)
+		PassWord: B100dyB4r0n!
+		Role: Pilot
+		Rank: Pilot
+		Activity: Active
+		Hours: 351
+		Can Fly: Denali, Longitude
+*/
 INSERT INTO `user` (`fname`, `lname`, `role`) VALUES ('Red', 'Baron', 'pilot');
 INSERT INTO `employee` (`employee_id`) VALUES (5);
 INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (5, 'active', 351, 'pilot');
 INSERT INTO `authentication` (`user_id`, `password`) VALUES (5, 'B100dyB4r0n!');
 INSERT INTO `pilot_model` (`pilot_id`, `plane_model`) VALUES (5, 'Denali'), (5, 'Longitude');
 
---new flight
+/*new flight:
+	ID: 2
+	From: St. Louis
+	To: Kickapoo
+	Day: Friday
+	Plane: 4 (Longitude) 
+	PIlot; Red Baron
+*/
 INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`) VALUES ('StLouis', 'Kickapoo', 4, 'Friday');
 INSERT INTO `pilot_flight` (`pilot_id`, `flight_id`) VALUES (5, 2);
 
 -- Show pilot name, source City, sink City, and plane model of flights
 select fname, lname, departing_city, destination_city, plane_model, days from user, flight, pilot_flight, equipment where user_id=pilot_flight.pilot_id and pilot_flight.flight_id=flight.flight_id and equipment.plane_id=flight.plane_id;
 
---new flight to and from same city (if db is done properly, this shouldn't work [functionality not yet implemented; this should still work])
+--new flight to and from same city (if db is done properly, this shouldn't work)
 INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`) VALUES ('JeffersonCity', 'JeffersonCity', 5, 'Saturday');
 INSERT INTO `pilot_flight` (`pilot_id`, `flight_id`) VALUES (5, 3);
 
---new pilot with 0 flight hours (if db is done properly, this should set Zap Branigan's flight hours to 0 even though we're saying he's got -6 hours)
+--new pilot with 0 flight hours (if db is done properly, this should set Zap Branigan's flight hours to NULL which should result in an error)
 INSERT INTO `user` (`fname`, `lname`, `role`) VALUES ('Zap', 'Branigan', 'pilot');
 INSERT INTO `employee` (`employee_id`) VALUES (6);
 INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (6, 'active', -6, 'pilot');
