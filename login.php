@@ -47,6 +47,9 @@
 			                        </div>
 			                        <button type="submit" name="login" class="btn btn-success">Login!</button>
 			                    </form>
+								<!--<form role="form" action="register.php" method="post" class="register-form">
+									<button type="submit" name="register" class="btn btn-info">Register!</button>
+								</form> -->
 		              </div>
                         </div>
                    </div>
