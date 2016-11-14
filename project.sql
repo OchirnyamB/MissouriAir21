@@ -65,11 +65,20 @@ CREATE TABLE `pilot` (
 `pilot_id` int(10) NOT NULL,
 `status` ENUM('active', 'inactive') NOT NULL,
 `flight_hours` int(10) NOT NULL,
-CHECK (`flight_hours` > 0),
 `pilot_rank` ENUM('pilot', 'copilot') NOT NULL,
 PRIMARY KEY (`pilot_id`),
 FOREIGN KEY (`pilot_id`) REFERENCES `employee` (`employee_id`)  ON DELETE CASCADE
 );
+
+DELIMITER @@
+CREATE TRIGGER check_flight_hours BEFORE INSERT ON `pilot`
+FOR EACH ROW
+BEGIN
+IF NEW.flight_hours<0 THEN
+SET NEW.flight_hours=0;
+END IF;
+END@@
+DELIMITER;
 
 CREATE TABLE `attendant` (
 `attendant_id` int(10) NOT NULL,
@@ -99,7 +108,6 @@ CREATE TABLE `flight`(
 `destination_city` varchar(30) NOT NULL,
 `plane_id` int(10) NOT NULL,
 `days` varchar(10) NOT NULL,
-CONSTRAINT no_circle CHECK (`destination_city` != `departing_city`),
 PRIMARY KEY (`flight_id`),
 FOREIGN KEY (`plane_id`) REFERENCES `equipment` (`plane_id`)
 );
@@ -153,7 +161,7 @@ INSERT INTO `customer` (`customer_id`, `age`) VALUES (3, 20);
 INSERT INTO `admin` (`admin_id`) VALUES (2);
 INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (1, 'active', 104, 'pilot');
 INSERT INTO `attendant` (`attendant_id`, `attendant_rank`) VALUES (4, 'senior');
-INSERT INTO `authentication` (`user_id`, `password`) VALUES (1, 'PilotPass'), (2, 'AdminPass'), (4, 'AttPass');
+INSERT INTO `authentication` (`user_id`, `password`) VALUES (1, 'PilotPass'), (2, 'AdminPass'), (3, 'CustPass'), (4, 'AttPass');
 INSERT INTO `model` (`plane_model`, `num_pilots`, `num_attendants`, `num_passengers`) VALUES ('Denali', 2, 1, 6), ('Longitude', 2, 1, 8);
 INSERT INTO `equipment` (`plane_model`) VALUES ('Denali'), ('Denali'), ('Denali'), ('Longitude'), ('Longitude');
 INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`) VALUES ('Columbia', 'KansasCity', 2, 'Monday');
@@ -162,4 +170,26 @@ INSERT INTO `pilot_model` (`pilot_id`, `plane_model`) VALUES (1, 'Denali');
 INSERT INTO `attendant_flight` (`attendant_id`, `flight_id`) VALUES (4, 1);
 INSERT INTO `reservation` (`flight_id`, `customer_id`, `date_reserved`, `num_bags`) VALUES (1, 3, '2016-04-30', 4);
 
-select fname, lname, departing_city, destination_city, plane_model from user, flight, pilot_flight, equipment where user_id=pilot_flight.pilot_id and pilot_flight.flight_id=flight.flight_id and equipment.plane_id=flight.plane_id;
+--new pilot
+INSERT INTO `user` (`fname`, `lname`, `role`) VALUES ('Red', 'Baron', 'pilot');
+INSERT INTO `employee` (`employee_id`) VALUES (5);
+INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (5, 'active', 351, 'pilot');
+INSERT INTO `authentication` (`user_id`, `password`) VALUES (5, 'B100dyB4r0n!');
+INSERT INTO `pilot_model` (`pilot_id`, `plane_model`) VALUES (5, 'Denali'), (5, 'Longitude');
+
+--new flight
+INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`) VALUES ('StLouis', 'Kickapoo', 4, 'Friday');
+INSERT INTO `pilot_flight` (`pilot_id`, `flight_id`) VALUES (5, 2);
+
+-- Show pilot name, source City, sink City, and plane model of flights
+select fname, lname, departing_city, destination_city, plane_model, days from user, flight, pilot_flight, equipment where user_id=pilot_flight.pilot_id and pilot_flight.flight_id=flight.flight_id and equipment.plane_id=flight.plane_id;
+
+--new flight to and from same city (if db is done properly, this shouldn't work [functionality not yet implemented; this should still work])
+INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`) VALUES ('JeffersonCity', 'JeffersonCity', 5, 'Saturday');
+INSERT INTO `pilot_flight` (`pilot_id`, `flight_id`) VALUES (5, 3);
+
+--new pilot with 0 flight hours (if db is done properly, this should set Zap Branigan's flight hours to 0 even though we're saying he's got -6 hours)
+INSERT INTO `user` (`fname`, `lname`, `role`) VALUES ('Zap', 'Branigan', 'pilot');
+INSERT INTO `employee` (`employee_id`) VALUES (6);
+INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (6, 'active', -6, 'pilot');
+
