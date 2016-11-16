@@ -1,3 +1,5 @@
+--DB for Group 21 CS3380 Project Fall 2016 - MissouriAir
+--DB is Boyce-Codd Normalized
 
 --To drop all tables, execute the following in this order:
 
@@ -43,6 +45,7 @@ FOREIGN KEY (`employee_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
 
 CREATE TABLE `authentication`(
 `user_id` int(10) NOT NULL,
+`passname` varchar(30) NOT NULL,
 `password` varchar(30) NOT NULL,
 PRIMARY KEY(`user_id`),
 FOREIGN KEY(`user_id`) REFERENCES `user` (`user_id`)  ON DELETE CASCADE
@@ -65,7 +68,7 @@ CREATE TABLE `pilot` (
 `pilot_id` int(10) NOT NULL,
 `status` ENUM('active', 'inactive') NOT NULL,
 `flight_hours` int(10) NOT NULL,
-`pilot_rank` ENUM('pilot', 'copilot') NOT NULL,
+`pilot_rank` ENUM('first officer', 'captain', 'senior captain') NOT NULL,
 PRIMARY KEY (`pilot_id`),
 FOREIGN KEY (`pilot_id`) REFERENCES `employee` (`employee_id`)  ON DELETE CASCADE
 );
@@ -83,6 +86,8 @@ DELIMITER ;
 CREATE TABLE `attendant` (
 `attendant_id` int(10) NOT NULL,
 `attendant_rank` ENUM('senior', 'junior') NOT NULL,
+`attendant_status` ENUM('active', 'inactive') NOT NULL,
+`attendant_hours` int(10) NOT NULL,
 PRIMARY KEY (`attendant_id`),
 FOREIGN KEY (`attendant_id`) REFERENCES `employee` (`employee_id`)  ON DELETE CASCADE
 );
@@ -96,7 +101,7 @@ PRIMARY KEY (`plane_model`)
 );
 
 CREATE TABLE `equipment`(
-`plane_id` int(10) NOT NULL AUTO_INCREMENT,
+`plane_id` varchar(10) NOT NULL,
 `plane_model` varchar(15) NOT NULL,
 PRIMARY KEY(`plane_id`),
 FOREIGN KEY(`plane_model`) REFERENCES `model` (`plane_model`)
@@ -106,8 +111,9 @@ CREATE TABLE `flight`(
 `flight_id` int(10) NOT NULL AUTO_INCREMENT,
 `departing_city` varchar(30) NOT NULL,
 `destination_city` varchar(30) NOT NULL,
-`plane_id` int(10) NOT NULL,
+`plane_id` varchar(10) NOT NULL,
 `days` varchar(10) NOT NULL,
+`base_price` decimal(3,2) NOT NULL,
 PRIMARY KEY (`flight_id`),
 FOREIGN KEY (`plane_id`) REFERENCES `equipment` (`plane_id`)
 );
@@ -159,11 +165,11 @@ FOREIGN KEY (`flight_id`) REFERENCES `flight` (`flight_id`) ON DELETE CASCADE
 
 --   --   --   --   --   --   --   --   --   --   --   --   --   --   --   --
 
-/* OLD
+-- test queries (note price calculation may not be right in queries: it is (1.05(base_price + 20*num_bags)))
 SELECT reservation.flight_id, departing_city, destination_city, fname, lname, num_bags*20 AS price FROM flight, reservation, user, customer WHERE user_id = customer.customer_id AND customer.customer_id = reservation.customer_id AND reservation.flight_id = flight.flight_id GROUP BY flight.flight_id;
 
-SELECT flight.flight_id, departing_city, destination_city, COUNT(reservation.flight_id) AS Passengers, SUM(reservation.num_bags*20) AS Revenue FROM flight, reservation WHERE reservation.flight_id = flight.flight_id;
-*/
+SELECT flight.flight_id, departing_city, destination_city, COUNT(reservation.flight_id) AS Passengers, ROUND(SUM((flight.base_price + reservation.num_bags*20)*1.05), 2) AS Revenue FROM flight INNER JOIN reservation WHERE reservation.flight_id = flight.flight_id;
+
 
 --Create a pilot, an admin, a customer, and an attendant and give them authentication
 --Also add some plane models, equipment, and flights
@@ -174,12 +180,12 @@ INSERT INTO `user` (`fname`, `lname`, `role`) VALUES ('John', 'Doe', 'pilot'), (
 INSERT INTO `employee` (`employee_id`) VALUES (1), (2), (4);
 INSERT INTO `customer` (`customer_id`, `age`) VALUES (3, 20);
 INSERT INTO `admin` (`admin_id`) VALUES (2);
-INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (1, 'active', 104, 'pilot');
-INSERT INTO `attendant` (`attendant_id`, `attendant_rank`) VALUES (4, 'senior');
-INSERT INTO `authentication` (`user_id`, `password`) VALUES (1, 'PilotPass'), (2, 'AdminPass'), (3, 'CustPass'), (4, 'AttPass');
+INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (1, 'active', 104, 'senior captain');
+INSERT INTO `attendant` (`attendant_id`, `attendant_rank`, `attendant_status`, `attendant_hours`) VALUES (4, 'senior', 'active', 58);
+INSERT INTO `authentication` (`user_id`, `passname`, `password`) VALUES (1, 'PilotUser', 'PilotPass'), (2, 'AdminUser', 'AdminPass'), (3, 'CustUser', 'CustPass'), (4, 'AttUser', 'AttPass');
 INSERT INTO `model` (`plane_model`, `num_pilots`, `num_attendants`, `num_passengers`) VALUES ('Denali', 2, 1, 6), ('Longitude', 2, 1, 8);
-INSERT INTO `equipment` (`plane_model`) VALUES ('Denali'), ('Denali'), ('Denali'), ('Longitude'), ('Longitude');
-INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`) VALUES ('Columbia', 'KansasCity', 2, 'Monday');
+INSERT INTO `equipment` (`plane_id`, `plane_model`) VALUES ('1', 'Denali'), ('2', 'Denali'), ('3', 'Denali'), ('4', 'Longitude'), ('5', 'Longitude');
+INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`, `base_price`) VALUES ('Columbia', 'KansasCity', '2', 'Monday', 100.00);
 INSERT INTO `pilot_flight` (`pilot_id`, `flight_id`) VALUES (1, 1);
 INSERT INTO `pilot_model` (`pilot_id`, `plane_model`) VALUES (1, 'Denali');
 INSERT INTO `attendant_flight` (`attendant_id`, `flight_id`) VALUES (4, 1);
@@ -198,8 +204,8 @@ INSERT INTO `reservation` (`flight_id`, `customer_id`, `date_reserved`, `num_bag
 */
 INSERT INTO `user` (`fname`, `lname`, `role`) VALUES ('Red', 'Baron', 'pilot');
 INSERT INTO `employee` (`employee_id`) VALUES (5);
-INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (5, 'active', 351, 'pilot');
-INSERT INTO `authentication` (`user_id`, `password`) VALUES (5, 'B100dyB4r0n!');
+INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (5, 'active', 351, 'Senior Captain');
+INSERT INTO `authentication` (`user_id`, `passname`, `password`) VALUES (5, 'BaronUser', 'B100dyB4r0n!');
 INSERT INTO `pilot_model` (`pilot_id`, `plane_model`) VALUES (5, 'Denali'), (5, 'Longitude');
 
 /*new flight:
@@ -208,20 +214,19 @@ INSERT INTO `pilot_model` (`pilot_id`, `plane_model`) VALUES (5, 'Denali'), (5, 
 	To: Kickapoo
 	Day: Friday
 	Plane: 4 (Longitude) 
-	PIlot; Red Baron
+	PIlot: Red Baron
 */
-INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`) VALUES ('StLouis', 'Kickapoo', 4, 'Friday');
+INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`, `base_price`) VALUES ('StLouis', 'Kickapoo', '4', 'Friday', 100);
 INSERT INTO `pilot_flight` (`pilot_id`, `flight_id`) VALUES (5, 2);
 
 -- Show pilot name, source City, sink City, and plane model of flights
 select fname, lname, departing_city, destination_city, plane_model, days from user, flight, pilot_flight, equipment where user_id=pilot_flight.pilot_id and pilot_flight.flight_id=flight.flight_id and equipment.plane_id=flight.plane_id;
 
---new flight to and from same city (if db is done properly, this shouldn't work)
-INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`) VALUES ('JeffersonCity', 'JeffersonCity', 5, 'Saturday');
+--new flight to and from same city (if db is done properly, this should set destination city to NULL and therefore cause an error)
+INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`, `base_price`) VALUES ('JeffersonCity', 'JeffersonCity', '5', 'Saturday', 100);
 INSERT INTO `pilot_flight` (`pilot_id`, `flight_id`) VALUES (5, 3);
 
 --new pilot with 0 flight hours (if db is done properly, this should set Zap Branigan's flight hours to NULL which should result in an error)
 INSERT INTO `user` (`fname`, `lname`, `role`) VALUES ('Zap', 'Branigan', 'pilot');
 INSERT INTO `employee` (`employee_id`) VALUES (6);
-INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (6, 'active', -6, 'pilot');
-
+INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (6, 'active', -6, 'First Officer');
