@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>update</title>
+        <style>
+        </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    </head>
+    
+    <body>
+    <a href="http://cs3380.rnet.missouri.edu/~pw329/lab9/lab9.php">Home Page</a>
+	<h1>Update your class</h1>
+	<hr>
+        <form action="administrator-update.php" method="post" class="col-md-4 col-md-offset-5">
+
+
+</html>
+	
+<?php
+        if(isset($_POST['submit'])){
+		switch($_POST['Information']){
+		
+		 case 1:
+		 echo "what do you want to do for the pilot?";
+		 <br>
+		 <select name ="pilot">
+		 <option value ="1">edit existed pilot information</option>
+		 <option value ="2">insert a new pilot</option>
+		 </select><br><br><br>
+		 <input type="submit" name="editpilot"><br>
+		 break;
+		 
+		 case 2:
+		 echo "what do you want to do for the attendent?"
+		 <br>
+		 <select name ="attendant">
+		 <option value ="1">edit existed attendent information</option>
+		 <option value ="2">insert a new attendent</option>
+		 </select><br><br><br>
+		 <input type="submit" name="editattendent"><br>
+		  break;
+		  
+		 case 3:
+		 echo "please enter the new information of customer"
+		 <br>
+		 echo "customer_id";
+		 <input type="text" name="customer_id">
+		 <br>
+		 echo "age";
+		 <input type="text" name="age">
+         <br>
+         echo "user_id";
+         <input type="text" name="fk_user_id"><br>
+		 echo "reservation_num";
+		 <input type="text" name="fk_reservation_num">
+		 <br>
+		 </select><br><br><br>
+		 <input type="submit" name="editcustomer"><br>
+		 break;
+		  
+		  case 4:
+		  echo "please enter new password"
+		  <br>
+		  <input type="text" name="password">
+		  <br>
+		  <input type="submit" name="editpassword">
+		  break;
+		  
+		  case 5:
+		  echo "please add new equipment"
+		  <br>
+		  echo "plane_id";
+		  <input type="text" name="plane_id">
+		  <br>
+		  echo "plane_model"
+		  <input type="text" name="fk_plane_model">
+		  <br>
+		  <input type="submit" name="editequipment">
+		  break;
+		  
+		  case 6:
+		  echo: "what do you want to do with the flight"
+          <br>
+		  <select name="flight">
+		  <option value ="1">monitor the flights</option>
+		  <option value ="2">add flights</option>
+		  </select><br><br><br>
+		  <input type="submit" name="editflight"><br>
+		 break;
+          		  
+		  
+		}    
+		
+		
+		
+		}	
+	
+	?>
+
+<?php
+      
+            if(isset($_POST['editpilot'])){
+      
+                 switch($_POST['pilot']){
+                  case1:
+                  role:
+                  <input type="text" name="fk_role"><br>
+                  employee_id:
+                  <input type="text" name="fk_employee_id"><br>
+                   status:
+                   <input type="radio" name="name" value="1">Yes
+                   <input type="radio" name="name" value="2">No
+                    <br><br>
+                   flight_hour:
+                   <input type="text" name="flight_hours"><br>
+                    pilot_rank:
+                   <input type="text" name="pilot_rank"><br>
+                    flight_number:
+                    <input type="text" name="fk_flight_number"><br>
+                    <input type="submit" name="changepilot"><br>
+                    break;
+
+
+                  case2:
+                  role:
+                  <input type="text" name="fk_role"><br>
+                  employee_id:
+                  <input type="text" name="fk_employee_id"><br>
+                   status:
+                   <input type="radio" name="name" value="1">Yes
+                   <input type="radio" name="name" value="2">No
+                    <br><br>
+                   flight_hour:
+                   <input type="text" name="flight_hour"><br>
+                    pilot_rank:
+                   <input type="text" name="pilot_rank"><br>
+                    flight_number:
+                    <input type="text" name="fk_flight_number"><br>
+                    <input type="submit" name="addpilot"><br>
+                                       
+	            
+                    break;
+
+?>
+
+<?php
+                    if(isset($_POST['editattendent'])){
+                    switch($_POST['attendant']){
+                    case1:
+                    role:
+                    <input type="name" name="fk_role"><br>
+                     employee_id:
+                    <input type="name", name="fk_employee_id"><br>
+                      attendant_rank:
+                     <input type="name", name="attendant_rank"><br>
+                     flight_number:
+                     <input type="name", name="fk_flight_num"><br>
+                       <input type="submit" name="changeattendant"><br>
+                      break;
+ 
+                     case2:
+                       case1:
+                    role:
+                    <input type="text" name="fk_role"><br>
+                     employee_id:
+                    <input type="text", name="fk_employee_id"><br>
+                      attendant_rank:
+                     <input type="text", name="attendant_rank"><br>
+                     flight_number:
+                     <input type="text", name="fk_flight_num"><br>
+                     <input type="submit" name="addattendant"><br>
+                      break;
+					  
+					  }
+					  }
+?>
+
+
+<php?
+            if(isset($_POST['editcustomer']))
+            {
+                 $customer_id=$_POST['customer_id'];
+                 $age=$_POST['age'];
+                 $user_id=$_POST['fk_user_id'];
+                 $reservation_num=$_POST['fk_reservation_num'];
+                 $conn= mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+                 if($stmt = mysqli_prepare($conn, "UPDATE customer SET customer_id=?,age=?,fk_user_id=?,fk_reservation_num=?, WHERE  customer_id=?")){
+                 mysqli_stmt_bind_param($stmt,"ssss",$customer_id,$age,$fk_user_id,$fk_reservation_num) or die("Error binding parameter on line 68");
+                 mysqli_stmt_execute($stmt);
+               }
+                  else
+                   {
+                     echo "prepare failed";
+                   }
+          	   $conn = mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+                  	   if(mysqli_connect_error()){
+			echo "Connection failed" . mysqli_connect_error();
+		}
+	
+  	  
+
+  }
+ 
+                               
+    
+
+             
+
+?>                     
+	
+
+
+<php? 
+           if(isset($_POST['editpassword']))
+{
+             $password=$_POST['password'];
+             $conn= mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+             if($stmt = mysqli_prepare($conn, "UPDATE authentication SET password=? WHERE  fk_emp_id=?, fk_role=?")){
+			   mysqli_stmt_bind_param($stmt,"s",$password) or die("Error binding parameter on line 68");
+               mysqli_stmt_execute($stmt);
+			 }
+               else
+                   {
+                     echo "prepare failed";
+                   }
+          	   $conn = mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+                  	   if(mysqli_connect_error()){
+			echo "Connection failed" . mysqli_connect_error();
+		}			 
+              
+			 
+			 
+			 
+}
+              
+?>
+
+
+
+
+<php?
+          if(isset($_POST['editequipment']))
+{
+           
+        $conn = mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+        
+        if(mysqli_connect_error()){
+            echo "Connection failed" . mysqli_connect_error();
+	    }else{
+            	#echo "Connection successful!<br>";
+		
+       	 }
+		 $plane_id=$_POST['plane_id'];
+		 $plane_model=$_POST['fk_plane_model'];
+		 if($stmt = mysqli_prepare($conn,"INSERT INTO equipment VALUES (?,?)"){
+		  mysqli_stmt_bind_param($stmt,"ss",$plane_id,$fk_plane_model) or
+			die("Error binding parameter on line 31");
+		if(mysqli_stmt_execute($stmt)){
+			echo "Successfully inserted!";
+		}else{
+			echo "Insertion error!";
+		}
+	}else{
+		die("prepare failed");
+	}
+
+	mysqli_stmt_close($stmt);
+
+	#$query = "insert into equipment values($plane_id, $fk_plane_model)";     
+        #$result = mysqli_query($conn,$query);
+        #mysqli_close($conn);
+
+		  
+		  
+		 
+		 
+		 }
+
+
+}		
+
+
+?>
+
+
+<php?
+           if(isset($_POST['editflight']))
+{
+      switch($_POST['flight'])
+	  {
+	     case1:
+		  $conn = mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+		  $query = "SELECT * FROM flight";
+          $result = mysqli_query($conn,$query);		 
+	      
+
+    echo"<br><br>";
+    
+    echo "<table class = 'table table-hover'><thead>"
+      
+	while($field = mysqli_fetch_field($result)){
+		echo "<th>\n". $field->name . "<br></th>\n";
+	}
+        
+	while($row = mysqli_fetch_row($result)){
+		echo "<tr>\n";	
+		foreach($row as $value){
+			echo "<td>". $value . "<br></td>\n";
+		}
+		echo "</tr>\n";
+	}
+    echo "</table>";
+    mysqli_close($conn);
+	break;
+	
+	case2:
+	     flightnumber:
+		 <input type="text" name="flight_num"><br>
+		 departingcity:
+		 <input type="text" name="departing_city"><br>
+		 destinationcity:
+		 <input type="text" name="destination_city"><br>
+		 <price
+		 <input type="text" name="price"><br>
+		 planeid:
+		 <input type="text" name="fk_plane_id"><br>
+		 <input type="submit" name="addflight"><nr>
+		 
+		 
+	
+	
+	
+         break;		 
+	}
+}
+?>
+
+
+ <?php
+	
+	
+	if(isset($_POST['addflight']){
+	  $conn = mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+        
+        if(mysqli_connect_error()){
+            echo "Connection failed" . mysqli_connect_error();
+	    }else{
+            	#echo "Connection successful!<br>";
+		
+       	 }
+		 $flight_num=$_POST['flight_num'];
+		 $departing_city=$_POST['departing_city'];
+		 $destination_city=$_POST['destination_city];
+		 $price=$_POST['price']; 
+		 $fk_plane_id=$_POST['fk_plane_id'];
+		 
+		 if($stmt = mysqli_prepare($conn,"INSERT INTO equipment VALUES (?,?,?,?,?)"){
+		  mysqli_stmt_bind_param($stmt,"sssss",$flight_num,$departing_city, $destination_city, $price, $fk_plane_id) or
+			die("Error binding parameter on line 31");
+		if(mysqli_stmt_execute($stmt)){
+			echo "Successfully inserted!";
+		}else{
+			echo "Insertion error!";
+		}
+	}else{
+		die("prepare failed");
+	}
+
+	mysqli_stmt_close($stmt);
+
+	#$query = "insert into equipment values($flight_num,$departing_city, $destination_city, $price, $fk_plane_id)";     
+        #$result = mysqli_query($conn,$query);
+        #mysqli_close($conn);
+     }
+	 
+	 ?>
+
+
+
+<?php
+
+     if(isset($_POST['changepilot'])
+	 {
+	     $fk_role=$_POST['fk_role'];
+		 $fk_employee_id=$_POST['fk_employee_id'];
+		 $status=$_POST['status'];
+		 $flight_hours=$_POST['flight_hours'];
+		 $pilot_rank=$_POST['pilot_rank'];
+		 $flight_number=$_POST['flight_numbers'];
+		
+		
+	
+		$conn= mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+        	
+		if(mysqli_connect_error()){
+        	    echo "Connection failed" . mysqli_connect_error();
+        	}
+
+		if($stmt = mysqli_prepare($conn, "UPDATE pilot SET fk_role=?, fk_employee_id=?,status=?, flight_hours=?, pilot_rank=?,fk_flight_num=? WHERE fk_employee_id=?, fk_role=?")){
+	
+		mysqli_stmt_bind_param($stmt,"ssssss",  $fk_role=, $fk_employee_id, $status, $flight_hours, $pilot_rank, $fk_flight_num ) or die("Error binding parameter on line 68");
+	
+		mysqli_stmt_execute($stmt);
+
+
+		}else{
+			echo "Prepare failed";
+		}
+
+ 	   $conn = mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+
+ 	   if(mysqli_connect_error()){
+			echo "Connection failed" . mysqli_connect_error();
+		}
+
+	   
+	   
+	   
+	   
+	 
+	 
+	 
+	 
+	 }
+?>
+
+<?php
+    if(isset($_POST['addpilot'])
+	{
+	  
+        $conn = mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+        
+        if(mysqli_connect_error()){
+            echo "Connection failed" . mysqli_connect_error();
+	    }else{
+            	#echo "Connection successful!<br>";
+		
+       	 }
+		  $fk_role=$_POST['fk_role'];
+		 $fk_employee_id=$_POST['fk_employee_id'];
+		 $status=$_POST['status'];
+		 $flight_hours=$_POST['flight_hours'];
+		 $pilot_rank=$_POST['pilot_rank'];
+		 $flight_number=$_POST['flight_number'];
+		
+		
+		 
+	if($stmt = mysqli_prepare($conn,"INSERT INTO pilot VALUES (?,?,?,?,?,?)")){
+	
+		mysqli_stmt_bind_param($stmt,"ssssss",$fk_role, $fk_employee_id,$status,$flight_hours,$pilot_rank,$flight_number) or
+			die("Error binding parameter on line 31");
+		if(mysqli_stmt_execute($stmt)){
+			echo "Successfully inserted!";
+		}else{
+			echo "Insertion error!";
+		}
+	}else{
+		die("prepare failed");
+	}
+
+	mysqli_stmt_close($stmt);
+
+	#$query = "insert into pilot values($fk_employee_id,$status,$flight_hours,$pilot_rank,$flight_number)";     
+        #$result = mysqli_query($conn,$query);
+        #mysqli_close($conn);
+    }
+
+    $conn = mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+
+    if(mysqli_connect_error()){
+		echo "Connection failed" . mysqli_connect_error();
+	}else{
+		//echo "<br>Connection successful!!!!";
+		;
+    }
+
+        
+	  
+	  
+	
+	
+	}
+?>
+
+
+<?php 
+   if(isset($_POST['changeattendant'])
+   {
+   
+       $fk_role=$_POST['fk_role'];
+	   $fk_employee_id=$_POST['fk_employee_id'];
+	   $attendant_rank=$_POST['attendant_rank'];
+	   fk_flight_num=$POST['fk_flight_num'];
+     	$conn= mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+        	
+		if(mysqli_connect_error()){
+        	    echo "Connection failed" . mysqli_connect_error();
+        	}
+
+		if($stmt = mysqli_prepare($conn, "UPDATE attendant SET fk_role=?, fk_employee_id=?,attendant_rank=?,fk_flight_num=? WHERE fk_employee_id=?, fk_role=?")){
+	
+		mysqli_stmt_bind_param($stmt,"ssss",$fk_role,$fk_employee_id,$attendant_rank,$fk_flight_num) or die("Error binding parameter on line 68");
+	
+		mysqli_stmt_execute($stmt);
+
+
+		}else{
+			echo "Prepare failed";
+		}
+
+ 	   $conn = mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+
+ 	   if(mysqli_connect_error()){
+			echo "Connection failed" . mysqli_connect_error();
+		}
+
+   
+   
+   
+   
+   
+   }
+?>
+
+
+<?php
+  if(isset($_POST['addatendant'])
+  {
+  
+      $fk_role=$_POST['fk_role'];
+	   $fk_employee_id=$_POST['fk_employee_id'];
+	   $attendant_rank=$_POST['attendant_rank'];
+	   fk_flight_num=$POST['fk_flight_num'];
+	   	$conn= mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+     if($stmt = mysqli_prepare($conn,"INSERT INTO attendant VALUES (?,?,?,?)")){
+	
+		mysqli_stmt_bind_param($stmt,"ssss",$fk_role, $fk_employee_id, $attendant_rank, $fk_flight_num) or
+			die("Error binding parameter on line 31");
+		if(mysqli_stmt_execute($stmt)){
+			echo "Successfully inserted!";
+		}else{
+			echo "Insertion error!";
+		}
+	}else{
+		die("prepare failed");
+	}
+
+	mysqli_stmt_close($stmt);
+
+	#$query = "insert into classes values($fk_role, $fk_employee_id, $attendant_rank,$fk_flight_num)";     
+        #$result = mysqli_query($conn,$query);
+        #mysqli_close($conn);
+    }
+
+    $conn = mysqli_connect(HOST,USERNAME,PASSWORD,DBNAME);
+
+    if(mysqli_connect_error()){
+		echo "Connection failed" . mysqli_connect_error();
+	}else{
+		//echo "<br>Connection successful!!!!";
+		;
+    }
+
+  }
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
