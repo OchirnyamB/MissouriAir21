@@ -112,7 +112,9 @@ CREATE TABLE `flight`(
 `departing_city` varchar(30) NOT NULL,
 `destination_city` varchar(30) NOT NULL,
 `plane_id` varchar(10) NOT NULL,
-`days` varchar(10) NOT NULL,
+`departure_date` date NOT NULL,
+`departure_time` time NOT NULL,
+`trip_duration` time NOT NULL,
 `base_price` decimal(3,2) NOT NULL,
 PRIMARY KEY (`flight_id`),
 FOREIGN KEY (`plane_id`) REFERENCES `equipment` (`plane_id`)
@@ -185,12 +187,11 @@ INSERT INTO `attendant` (`attendant_id`, `attendant_rank`, `attendant_status`, `
 INSERT INTO `authentication` (`user_id`, `passname`, `password`) VALUES (1, 'PilotUser', 'PilotPass'), (2, 'AdminUser', 'AdminPass'), (3, 'CustUser', 'CustPass'), (4, 'AttUser', 'AttPass');
 INSERT INTO `model` (`plane_model`, `num_pilots`, `num_attendants`, `num_passengers`) VALUES ('Denali', 2, 1, 6), ('Longitude', 2, 1, 8);
 INSERT INTO `equipment` (`plane_id`, `plane_model`) VALUES ('1', 'Denali'), ('2', 'Denali'), ('3', 'Denali'), ('4', 'Longitude'), ('5', 'Longitude');
-INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`, `base_price`) VALUES ('Columbia', 'KansasCity', '2', 'Monday', 100.00);
+INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `departure_date`, `departure_time`, `trip_duration`, `base_price`) VALUES ('Columbia', 'KansasCity', '2', '2016-05-13', '16:00', '00:30', 100.00);
 INSERT INTO `pilot_flight` (`pilot_id`, `flight_id`) VALUES (1, 1);
 INSERT INTO `pilot_model` (`pilot_id`, `plane_model`) VALUES (1, 'Denali');
 INSERT INTO `attendant_flight` (`attendant_id`, `flight_id`) VALUES (4, 1);
 INSERT INTO `reservation` (`flight_id`, `customer_id`, `date_reserved`, `num_bags`) VALUES (1, 3, '2016-04-30', 4);
-
 
 /*  new pilot:
 		Name: Red Baron
@@ -216,7 +217,7 @@ INSERT INTO `pilot_model` (`pilot_id`, `plane_model`) VALUES (5, 'Denali'), (5, 
 	Plane: 4 (Longitude) 
 	PIlot: Red Baron
 */
-INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `days`, `base_price`) VALUES ('StLouis', 'Kickapoo', '4', 'Friday', 100);
+INSERT INTO `flight` (`departing_city`, `destination_city`, `plane_id`, `departure_date`, `departure_time`, `trip_duration`, `base_price`) VALUES ('StLouis', 'Kickapoo', '4', '2016-11-27', '10:30', '01:15', 100);
 INSERT INTO `pilot_flight` (`pilot_id`, `flight_id`) VALUES (5, 2);
 
 -- Show pilot name, source City, sink City, and plane model of flights
@@ -230,3 +231,11 @@ INSERT INTO `pilot_flight` (`pilot_id`, `flight_id`) VALUES (5, 3);
 INSERT INTO `user` (`fname`, `lname`, `role`) VALUES ('Zap', 'Branigan', 'pilot');
 INSERT INTO `employee` (`employee_id`) VALUES (6);
 INSERT INTO `pilot` (`pilot_id`, `status`, `flight_hours`, `pilot_rank`) VALUES (6, 'active', -6, 'First Officer');
+
+
+-- SQL commands to alter flight table to have three fields describing departure instead of just `days` 
+ALTER TABLE `flight` DROP COLUMN `days`;
+ALTER TABLE `flight` ADD `departure_date` date NOT NULL;
+ALTER TABLE `flight` ADD `departure_time` time NOT NULL;
+ALTER TABLE `flight` ADD `trip_duration` time NOT NULL;
+-- --
